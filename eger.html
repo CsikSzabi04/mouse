@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajt</title>
+    <style>
+        body{background-color: bisque;}
+        #panel{width: 768px; height: 576px; padding: 10px; font-size: 0pt; margin:0px auto; background-color: white; border: 1px solid black;}
+        #bottom{width: 768px; margin: 10px auto; font-size: 16pt; font-weight: bold;}
+        #bottom img{vertical-align:middle;}
+        #right{float: right;}
+    </style>
+    <script>
+
+        let t = [];
+        let es = 1;
+        let eo = 1;
+        let db = 0;
+
+        let t1 = null;
+        let t2 = null;
+        let mp = 100;
+
+        function start(){
+            let html = "";
+            for(let s=0; s<12; s++){
+                t[s] = [];
+                for(let o=0; o<16; o++){
+                    t[s][o] = "null;"
+                    html += "<img src='null.png' id='"+s+"x"+o+"' >"
+                }
+            }
+            document.getElementById("panel").innerHTML = html;
+            think();
+            t2 = setInterval(grav, 250); 
+           }
+
+        function think(){
+            db = 0;
+            for(let s=0; s<12; s++) for(let o=0; o<16; o++){
+                if(Math.random() > 0.25) {
+                    setPic(s,o, "sajt"); db++;
+                }else setPic(s, o, "bomb");
+            }
+            es = Math.floor(Math.random()*12);
+            eo = Math.floor(Math.random()*16);
+            if(t[es][eo] == "sajt") db--;
+            setPic(es, eo, "eger");
+            document.getElementById("db").innerHTML = db;
+            mp = 100; t1 = setInterval(sec, 1000);
+        }
+
+        function sec(){
+            mp--; document.getElementById("mp").innerHTML = mp;
+            if(mp==0){
+                clearInterval(t1);
+                document.getElementById("mp").innerHTML = "Lassú vagy!";
+            }
+        }
+
+        function setPic(s, o, pic){
+            t[s][o] = pic; document.getElementById(s+"x"+o).src =  pic + ".png";
+        }
+
+        function move(){
+            let b = event.key;
+            setPic(es, eo, "null");
+            if (b == 'w' && es > 0 && t[es-1][eo] != "bomb") es--;
+            if (b == 's' && es < 11 && t[es+1][eo] != "bomb") es++;
+            if (b == 'a' && eo > 0 && t[es][eo-1] != "bomb") eo--;
+            if (b == 'd' && eo < 15 && t[es][eo+1] != "bomb") eo++;
+            if(t[es][eo] == "sajt"){
+                db--; document.getElementById("db").innerHTML = db;
+            }
+            setPic(es, eo, "eger");
+        }
+
+        function grav(){
+            for(let s=10; s>=0; s--) for(let o=0; o<16; o++){
+                if(t[s][o] == "bomb"){
+                    if(t[s+1][o] == "null"){
+                        setPic(s,o,"null"); setPic(s+1, o,"bomb");
+                    }else if(t[s+1][o]=="bomb"){
+                        if( o > 0 && t[s][o-1]=="null" && t[s+1][o-1]=="null"){
+                            setPic(s,o,"null"); setPic(s+1, o-1, "bomb");
+                        }else if(o<15 && t[s][o+1] == "null" && t[s+1][o+1] == "null"){
+                            setPic(s,o,"null"); setPic(s-1, o+1, "bomb");
+                        }
+                    }
+                }
+            }
+        }
+
+    </script>
+</head>
+<body onload="start();" onkeydown="move();">
+    <div id="panel"></div>
+    <div id="bottom">
+        <img src="sajt.png" > <span id="db">0</span>
+        <div id="right"><span id="mp">100</span> <img src="hour.png"> </div>
+        
+    </div>
+</body>
+</html>
