@@ -57,7 +57,7 @@
             if(mp==0){
                 clearInterval(t1);
                 setPic(es,eo,"dead");
-                document.getElementById("mp").innerHTML = "Lassú vagy!";
+                document.getElementById("mp").innerHTML = "Dead!!";
             }
         }
 
@@ -87,6 +87,11 @@
                 clearInterval(t1);
                 document.getElementById("mp").innerHTML = "Győztél!"
             }
+
+            //if (b == 'w' && es > 0 && t[es+0][eo] != "sajt") sec();
+            //if (b == 's' && es < 11 && t[es+1][eo] != "sajt") sec();
+           // if (b == 'a' && eo > 0 && t[es][eo-1] != "sajt") sec();
+            //if (b == 'd' && eo < 15 && t[es][eo+1] != "sajt") sec();
         }
 
         function grav(){
