@@ -56,6 +56,7 @@
             mp--; document.getElementById("mp").innerHTML = mp;
             if(mp==0){
                 clearInterval(t1);
+                setPic(es,eo,"dead");
                 document.getElementById("mp").innerHTML = "Lassú vagy!";
             }
         }
@@ -65,16 +66,27 @@
         }
 
         function move(){
+            if(mp==0)return;
             let b = event.key;
             setPic(es, eo, "null");
             if (b == 'w' && es > 0 && t[es-1][eo] != "bomb") es--;
             if (b == 's' && es < 11 && t[es+1][eo] != "bomb") es++;
             if (b == 'a' && eo > 0 && t[es][eo-1] != "bomb") eo--;
+            if(b == 'a' && eo > 1 && t[es][eo-1] == "bomb" && t[es][eo-2] == "null"){
+                setPic(es,eo-2,"bomb"); eo--;
+            }
             if (b == 'd' && eo < 15 && t[es][eo+1] != "bomb") eo++;
+            if(b == 'd' && eo < 14 && t[es][eo+1] == "bomb" && t[es][eo+2] == "null"){
+                setPic(es,eo+2,"bomb");eo++;
+            }
             if(t[es][eo] == "sajt"){
                 db--; document.getElementById("db").innerHTML = db;
             }
             setPic(es, eo, "eger");
+            if(db==0){
+                clearInterval(t1);
+                document.getElementById("mp").innerHTML = "Győztél!"
+            }
         }
 
         function grav(){
